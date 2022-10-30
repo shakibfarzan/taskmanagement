@@ -1,0 +1,21 @@
+{% extends "base_menu.html" %}
+{% load humanize %}
+{% block content %}
+<span style="float: right;">
+({{ task.created_at|naturaltime }})
+{% if task.owner == user %}
+<a href="{% url 'tasks:task_update' task.id %}"><i class="fa fa-pencil"></i></a>
+<a href="{% url 'tasks:task_delete' task.id %}"><i class="fa fa-trash"></i></a>
+{% endif %}
+</span>
+<h1>{{ task.title }}</h1>
+<p>
+{{ task.description }}
+</p>
+<p>
+<a href="{% url 'tasks:all' %}">All tasks</a>
+</p>
+{% if user.is_authenticated %}
+<br clear="all"/>
+{% endif %}
+{% endblock %}

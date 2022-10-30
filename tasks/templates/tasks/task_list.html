@@ -1,0 +1,36 @@
+{% extends "base_menu.html" %}
+{% block content %}
+<h1>Tasks</h1>
+<form>
+  <input type="text" placeholder="Search.." name="search"
+  {% if search %} value="{{ search }}" {% endif %}
+  >
+  <button type="submit"><i class="fa fa-search"></i></button>
+<a href="{% url 'tasks:all' %}"><i class="fa fa-undo"></i></a>
+</form>
+<p>
+{% if task_list %}
+<ul>
+  {% for task in task_list %}
+    <li>
+        <a href="{% url 'tasks:task_detail'  task.id %}">{{ task.title }}</a>
+        {% if task.owner == user %}
+        (<a href="{% url 'tasks:task_update' task.id %}">Edit</a> |
+        <a href="{% url 'tasks:task_delete' task.id %}">Delete</a>)
+        {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+  <p>There are no tasks in the database.</p>
+{% endif %}
+</p>
+<p>
+<a href="{% url 'tasks:task_create' %}">Add an task</a> |
+{% if user.is_authenticated %}
+<a href="{% url 'logout' %}?next={% url 'tasks:all' %}">Logout</a>
+{% else %}
+<a href="{% url 'login' %}?next={% url 'tasks:all' %}">Login</a>
+{% endif %}
+</p>
+{% endblock %}

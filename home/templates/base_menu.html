@@ -1,0 +1,31 @@
+{% extends "base_bootstrap.html" %}
+{% block navbar %}
+<nav class="navbar navbar-default navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">{{ settings.APP_NAME }}</a>
+    </div>
+    <ul class="nav navbar-nav">
+      {% url 'tasks' as tasks %}
+      <li {% if request.get_full_path == tasks %}class="active"{% endif %}>
+          <a href="{% url 'tasks:all' %}">Tasks</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+        <li>
+        <a href="{% url 'tasks:task_create' %}">Create Task</a>
+        </li>
+        <li class="dropdown">
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'logout' %}?next={% url 'tasks:all' %}">Logout</a></li>
+            </ul>
+        </li>
+        {% else %}
+        <li>
+        <a href="{% url 'login' %}?next={% url 'tasks:all' %}">Login</a>
+        </li>
+        {% endif %}
+    </ul>
+  </div>
+</nav>
+{% endblock %}
