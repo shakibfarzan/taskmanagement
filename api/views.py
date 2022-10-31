@@ -9,6 +9,8 @@ class TaskListCreateAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         query_set = Task.objects.all()
+        if self.request.method not in permissions.SAFE_METHODS:
+            query_set = Task.objects.filter(owner=self.request.user.id)
         search_value = self.request.query_params.get('search')
         if search_value:
             query = Q(title__icontains=search_value) 
@@ -19,5 +21,9 @@ class TaskListCreateAPIView(generics.ListCreateAPIView):
 class TaskRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerialzer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    queryset = Task.objects.all()
+    def get_queryset(self):
+        query_set = Task.objects.all()
+        if self.request.method not in permissions.SAFE_METHODS:
+            query_set = Task.objects.filter(owner=self.request.user.id)
+        return query_set
     lookup_field = 'pk'
