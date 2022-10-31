@@ -22,7 +22,7 @@ class TaskListView(OwnerListView):
             task_list = Task.objects.filter(query).select_related()
         else :
             task_list = Task.objects.all()
-        ctx = {'task_list' : task_list, 'string': search_value}
+        ctx = {'task_list' : task_list, 'search': search_value}
         return render(request, self.template_name, ctx)
 
 
